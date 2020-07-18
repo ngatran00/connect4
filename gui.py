@@ -1,4 +1,5 @@
 import math
+import time
 
 from functools import partial
 
@@ -77,22 +78,7 @@ class Window(QMainWindow):
 
         for button in self.buttons:
             button.setDisabled(True)
-        b, score = self.c4.minimax(self.board, not self.bot, -math.inf, math.inf, 7)
-        for button in self.buttons:
-            button.setDisabled(True)
-        for row in range(6):
-            diff = [b[row][col] == self.board[row][col] for col in range(7)]
-            if False in diff:
-                col = diff.index(False)
-                self.board = b
-                self.color = Qt.red
-                self.changeColor()
-                self.circles_filled[(col, 5-row)] = Qt.red
-                for button in self.buttons:
-                    button.setDisabled(False)
-                break
-        self.bot = False
-
+        self.setBotMove()
         self.show()
 
     def setUserMove(self, user_col):
@@ -105,8 +91,8 @@ class Window(QMainWindow):
                     if self.board[i][user_col] == "-":
                         self.board[i][user_col] = "X"
                         self.color = Qt.green
-                        self.changeColor()
                         self.circles_filled[(user_col, row)] = Qt.green
+                        time.sleep(0.5)
                         valid = True
                         break
                 else:
@@ -141,8 +127,8 @@ class Window(QMainWindow):
                     col = diff.index(False)
                     self.board = b
                     self.color = Qt.red
-                    self.changeColor()
                     self.circles_filled[(col, 5-row)] = Qt.red
+                    self.changeColor()
                     for button in self.buttons:
                         button.setDisabled(False)
                     break
